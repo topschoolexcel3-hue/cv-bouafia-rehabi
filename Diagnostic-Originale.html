@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnostic Gratuit — Hadji Consulting</title>
+<meta name="description" content="Identifiez les vrais problèmes de votre service en 2 minutes. Diagnostic gratuit par Hadji Consulting.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.6.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:#F0F2F5;
+  min-height:100vh;
+  padding:1rem;
+  color:#1A1A28;
+}
+.app{
+  max-width:440px;
+  margin:0 auto;
+  padding-bottom:2rem;
+}
+
+/* SCREENS */
+.screen{display:none}
+.screen.active{display:block}
+
+/* CARDS */
+.card{
+  background:#fff;
+  border:1px solid #E5E7EB;
+  border-radius:14px;
+  padding:1.25rem;
+  margin-bottom:1rem;
+}
+.card-navy{
+  background:#1A2F5A;
+  border-radius:14px;
+  padding:1.5rem 1.25rem;
+  margin-bottom:1rem;
+}
+
+/* BUTTONS */
+.btn-primary{
+  display:block;width:100%;padding:15px;
+  background:#1A2F5A;color:#fff;
+  border:none;border-radius:10px;
+  font-size:15px;font-weight:500;
+  cursor:pointer;text-align:center;
+  margin-top:1rem;text-decoration:none;
+  transition:background .15s;
+}
+.btn-primary:hover{background:#243d75}
+.btn-green{
+  display:block;width:100%;padding:15px;
+  background:#25D366;color:#fff;
+  border:none;border-radius:10px;
+  font-size:15px;font-weight:500;
+  cursor:pointer;text-align:center;
+  text-decoration:none;margin-top:.75rem;
+  transition:background .15s;
+}
+.btn-green:hover{background:#1ebe5d}
+.btn-secondary{
+  display:block;width:100%;padding:13px;
+  background:transparent;color:#6B7280;
+  border:1px solid #D1D5DB;border-radius:10px;
+  font-size:14px;cursor:pointer;text-align:center;
+  margin-top:.75rem;text-decoration:none;
+  transition:background .15s;
+}
+.btn-secondary:hover{background:#F9FAFB}
+
+/* STATS */
+.stats-row{display:flex;gap:0;margin-top:1.25rem}
+.stat-item{flex:1;text-align:center}
+.stat-divider{width:1px;background:rgba(255,255,255,.2)}
+.stat-num{font-size:26px;font-weight:600;color:#fff}
+.stat-lbl{font-size:11px;color:#A8BDD4;margin-top:2px}
+
+/* SERVICE GRID */
+.service-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;margin-top:1rem;
+}
+.service-card{
+  background:#fff;border:1px solid #E5E7EB;
+  border-radius:12px;padding:14px 10px;
+  cursor:pointer;text-align:center;
+  transition:border-color .15s,background .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.service-card:hover{border-color:#1A2F5A;background:#F0F4FF}
+.service-card.selected{
+  border:2px solid #1A2F5A;
+  background:#EBF3FB;
+}
+.service-icon{font-size:26px;color:#1A2F5A;margin-bottom:8px}
+.service-name{font-size:13px;font-weight:500;color:#1A1A28;line-height:1.3}
+.service-sub{font-size:11px;color:#9CA3AF;margin-top:3px;line-height:1.3}
+
+/* PROGRESS */
+.progress{height:5px;background:#E5E7EB;border-radius:3px;margin-bottom:1.25rem}
+.progress-fill{height:5px;background:#1A2F5A;border-radius:3px;transition:width .3s}
+
+/* PROBLEM LIST */
+.problem-item{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:13px 0;border-bottom:1px solid #F3F4F6;
+}
+.problem-item:last-child{border-bottom:none}
+.problem-item input[type=checkbox]{
+  width:20px;height:20px;min-width:20px;
+  margin-top:1px;cursor:pointer;
+  accent-color:#1A2F5A;
+}
+.problem-label{
+  font-size:14px;color:#374151;
+  line-height:1.55;cursor:pointer;
+}
+
+/* SCORE */
+.score-ring{
+  width:120px;height:120px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;margin:0 auto 1rem;
+  border:7px solid;
+}
+.score-num{font-size:40px;font-weight:600;line-height:1}
+.score-lbl{font-size:12px;color:#9CA3AF;margin-top:2px}
+
+/* CHECKED PROBLEMS */
+.problem-checked{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 0;border-bottom:1px solid #F3F4F6;
+}
+.problem-checked:last-child{border-bottom:none}
+.check-icon{min-width:16px;margin-top:3px;font-size:14px;color:#DC2626}
+
+/* RECOMMENDATION CARD */
+.rec-card{
+  background:#EBF3FB;border:1px solid #BDD7EE;
+  border-radius:12px;padding:1.1rem 1.25rem;
+  margin:1rem 0;
+}
+.rec-tag{font-size:11px;font-weight:600;color:#1A2F5A;margin-bottom:.3rem;letter-spacing:.3px}
+.rec-title{font-size:15px;font-weight:600;color:#1A1A28}
+.rec-desc{font-size:13px;color:#4B5563;margin-top:.3rem;line-height:1.5}
+
+/* HEADER BAR */
+.header-bar{
+  background:#1A2F5A;border-radius:14px 14px 0 0;
+  padding:1.1rem 1.25rem;margin:-1.25rem -1.25rem 1.25rem;
+}
+.header-title{font-size:16px;font-weight:600;color:#fff}
+.header-sub{font-size:12px;color:#A8BDD4;margin-top:3px}
+
+/* ERROR */
+.err{
+  font-size:13px;color:#DC2626;
+  margin-top:.5rem;display:none;
+  padding:8px 12px;background:#FEF2F2;
+  border-radius:8px;border:1px solid #FECACA;
+}
+
+/* FOOTER */
+.footer{
+  text-align:center;padding:1.5rem 0 0;
+  font-size:12px;color:#9CA3AF;
+}
+.footer a{color:#1A2F5A;text-decoration:none}
+
+/* LABEL TAG */
+.step-tag{
+  display:inline-block;padding:3px 10px;
+  background:#EBF3FB;color:#1A2F5A;
+  border-radius:6px;font-size:12px;
+  font-weight:500;margin-bottom:.75rem;
+}
+
+/* DARK MODE */
+@media(prefers-color-scheme:dark){
+  body{background:#0F172A;color:#F1F5F9}
+  .card{background:#1E293B;border-color:#334155}
+  .service-card{background:#1E293B;border-color:#334155;color:#F1F5F9}
+  .service-card:hover{background:#1A2F5A;border-color:#2E5299}
+  .service-card.selected{background:#1A2F5A;border-color:#4A7FCB}
+  .service-name{color:#F1F5F9}
+  .problem-label{color:#CBD5E1}
+  .problem-item{border-color:#1E293B}
+  .btn-secondary{color:#94A3B8;border-color:#334155}
+  .btn-secondary:hover{background:#1E293B}
+  .progress{background:#1E293B}
+  .rec-card{background:#1A2F5A;border-color:#2E5299}
+  .rec-title{color:#F1F5F9}
+  .rec-desc{color:#CBD5E1}
+  .problem-checked{border-color:#1E293B}
+  .footer{color:#64748B}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ═══════ SCREEN 0 : ACCUEIL ═══════ -->
+<div class="screen active" id="s-accueil">
+  <div class="card-navy">
+    <div style="font-size:11px;color:#A8BDD4;margin-bottom:.6rem;font-weight:500">
+      HADJI CONSULTING · DIAGNOSTIC GRATUIT
+    </div>
+    <h1 style="font-size:21px;font-weight:600;color:#fff;line-height:1.35;margin-bottom:.75rem">
+      Votre équipe perd combien d'heures par semaine sur des problèmes non résolus ?
+    </h1>
+    <p style="font-size:13px;color:#A8BDD4;line-height:1.6">
+      2 minutes · 9 services · Rapport personnalisé · Gratuit
+    </p>
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-num">400+</div>
+        <div class="stat-lbl">problèmes résolus</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-num">9</div>
+        <div class="stat-lbl">services couverts</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-num">16</div>
+        <div class="stat-lbl">ans d'expérience</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p style="font-size:14px;color:#4B5563;line-height:1.65;margin-bottom:1rem">
+      Ce diagnostic identifie les situations réelles qui coûtent du temps et de l'argent à votre organisation — RH, Finance, Achats, Commercial, IT, Logistique, Marketing, Production ou Direction.
+    </p>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#374151">
+        <i class="ti ti-check" style="color:#16A34A;font-size:16px" aria-hidden="true"></i>
+        Situations réelles vécues par les équipes en Algérie et dans le Golfe
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#374151">
+        <i class="ti ti-check" style="color:#16A34A;font-size:16px" aria-hidden="true"></i>
+        Rapport personnalisé avec la formation recommandée
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#374151">
+        <i class="ti ti-check" style="color:#16A34A;font-size:16px" aria-hidden="true"></i>
+        Résultats envoyés directement par WhatsApp
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-primary" onclick="goTo('s-choix')">
+    <i class="ti ti-stethoscope" aria-hidden="true"></i>
+    Démarrer le diagnostic
+  </button>
+  <p style="text-align:center;margin-top:.75rem;font-size:12px;color:#9CA3AF">
+    Gratuit · Sans engagement · Confidentiel
+  </p>
+  <div class="footer">
+    <a href="https://cv-bouafia-rehabi.vercel.app" target="_blank">cv-bouafia-rehabi.vercel.app</a>
+    &nbsp;·&nbsp; Hadji Consulting &nbsp;·&nbsp; Algérie &amp; Oman
+  </div>
+</div>
+
+<!-- ═══════ SCREEN 1 : CHOIX SERVICE ═══════ -->
+<div class="screen" id="s-choix">
+  <div class="step-tag">Étape 1 sur 2</div>
+  <h2 style="font-size:18px;font-weight:600;margin-bottom:.25rem">Choisissez votre service</h2>
+  <p style="font-size:13px;color:#6B7280;margin-bottom:0">
+    Sélectionnez le service que vous souhaitez diagnostiquer
+  </p>
+  <div class="service-grid" id="service-grid"></div>
+  <div class="err" id="err-service">
+    <i class="ti ti-alert-circle" aria-hidden="true"></i>
+    Sélectionnez un service pour continuer.
+  </div>
+  <button class="btn-primary" onclick="startDiag()">
+    Lancer le diagnostic <i class="ti ti-arrow-right" aria-hidden="true"></i>
+  </button>
+  <button class="btn-secondary" onclick="goTo('s-accueil')">
+    <i class="ti ti-arrow-left" aria-hidden="true"></i> Retour
+  </button>
+</div>
+
+<!-- ═══════ SCREEN 2 : DIAGNOSTIC ═══════ -->
+<div class="screen" id="s-diag">
+  <div class="step-tag">Étape 2 sur 2 · <span id="diag-service-label"></span></div>
+  <h2 style="font-size:17px;font-weight:600;margin-bottom:.5rem">
+    Cochez les situations qui concernent votre organisation
+  </h2>
+  <p style="font-size:13px;color:#6B7280;margin-bottom:.75rem">
+    Soyez honnête — c'est le seul moyen d'obtenir un diagnostic utile
+  </p>
+  <div class="progress">
+    <div class="progress-fill" id="prog" style="width:0%"></div>
+  </div>
+  <div class="card">
+    <div id="problems-list"></div>
+  </div>
+  <div class="err" id="err-diag">
+    <i class="ti ti-alert-circle" aria-hidden="true"></i>
+    Cochez au moins une situation pour obtenir votre rapport.
+  </div>
+  <button class="btn-primary" onclick="showResults()">
+    Voir mon rapport <i class="ti ti-arrow-right" aria-hidden="true"></i>
+  </button>
+  <button class="btn-secondary" onclick="goTo('s-choix')">
+    <i class="ti ti-arrow-left" aria-hidden="true"></i> Changer de service
+  </button>
+</div>
+
+<!-- ═══════ SCREEN 3 : RÉSULTATS ═══════ -->
+<div class="screen" id="s-results">
+  <div class="card">
+    <div class="header-bar">
+      <div class="header-title">
+        <i class="ti ti-clipboard-check" aria-hidden="true"></i>
+        Rapport de diagnostic
+      </div>
+      <div class="header-sub" id="res-service-label"></div>
+    </div>
+
+    <div style="text-align:center;margin-bottom:1.25rem">
+      <div class="score-ring" id="score-ring">
+        <div class="score-num" id="score-num">0</div>
+        <div class="score-lbl">sur 10</div>
+      </div>
+      <div style="font-size:16px;font-weight:600;color:#1A1A28" id="score-title"></div>
+      <div style="font-size:13px;color:#6B7280;margin-top:.3rem" id="score-sub"></div>
+    </div>
+
+    <div style="margin-bottom:.75rem">
+      <div style="font-size:12px;font-weight:600;color:#6B7280;margin-bottom:.5rem">
+        SITUATIONS IDENTIFIÉES DANS VOTRE ORGANISATION
+      </div>
+      <div id="checked-list"></div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-tag">FORMATION RECOMMANDÉE</div>
+      <div class="rec-title" id="rec-title"></div>
+      <div class="rec-desc" id="rec-desc"></div>
+    </div>
+  </div>
+
+  <a id="wa-link" href="#" class="btn-green">
+    <i class="ti ti-brand-whatsapp" aria-hidden="true"></i>
+    Envoyer mes résultats par WhatsApp
+  </a>
+
+  <a href="https://cv-bouafia-rehabi.vercel.app" target="_blank" class="btn-primary" style="background:#F0F4FF;color:#1A2F5A;border:1px solid #BDD7EE;margin-top:.75rem">
+    <i class="ti ti-external-link" aria-hidden="true"></i>
+    Voir le catalogue complet des formations
+  </a>
+
+  <button class="btn-secondary" onclick="restart()">
+    <i class="ti ti-refresh" aria-hidden="true"></i>
+    Tester un autre service
+  </button>
+
+  <div class="footer" style="margin-top:1.5rem">
+    <strong style="color:#1A2F5A">Hadji Consulting</strong> · Rehabi Bouafia<br>
+    <a href="https://cv-bouafia-rehabi.vercel.app" target="_blank">cv-bouafia-rehabi.vercel.app</a>
+    &nbsp;·&nbsp; Algérie 🇩🇿 &amp; Oman 🇴🇲<br>
+    <span style="color:#9CA3AF">Excel · Power BI · SQL · Python · IA</span>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<script>
+const SERVICES=[
+  {id:"rh",name:"Ressources Humaines",sub:"DRH · Responsable RH",icon:"ti-users",
+   problems:[
+    "Un CDD expire sans que personne ne le remarque — l'employé travaille sans contrat valide",
+    "Un employé réclame 12 jours de congés, le DRH dit 7 — impossible à vérifier sans chercher dans des papiers",
+    "La direction demande le taux d'absentéisme en réunion — calcul à la main devant tout le monde",
+    "Deux employés du même service absents en même temps — service bloqué, personne ne l'avait vu",
+    "La paie contient des erreurs chaque mois — découvertes quand l'employé se plaint",
+    "40% des managers n'ont pas fait les évaluations — le DRH relance par téléphone un par un",
+    "Un employé part — aucune procédure de passation, les accès et dossiers disparaissent avec lui",
+    "Le planning des congés se fait à la main chaque été — 2h de travail pour 30 employés",
+    "50 CVs reçus pour un poste — dispersés entre email, papier et WhatsApp",
+    "Le bilan social doit être remis dans 48h — les données n'ont jamais été centralisées"
+   ]},
+  {id:"finance",name:"Finance & Comptabilité",sub:"DAF · Responsable Finance",icon:"ti-chart-bar",
+   problems:[
+    "Le budget d'un département est consommé à 98% en août — personne ne l'avait vu venir",
+    "Une facture fournisseur est en retard depuis 44 jours — les pénalités courent, personne n'a relancé",
+    "Un client doit 6.8M DZD depuis 74 jours — chacun pensait que l'autre relançait",
+    "Le rapport financier mensuel prend 3 jours — les données sont dans 5 fichiers différents",
+    "Le PDG demande la trésorerie disponible le vendredi soir — 2h de calcul pour répondre",
+    "Une facture fournisseur payée deux fois — le doublon découvert seulement un mois plus tard",
+    "Les reportings varient selon qui les produit — deux personnes donnent deux chiffres différents",
+    "Impossible de comparer budget prévu vs réalisé sans passer une journée sur les fichiers",
+    "Les créances clients ne sont pas classées par ancienneté — on ne sait pas qui relancer en priorité",
+    "Simulation d'augmentation de salaire — recalcul manuel de toutes les fiches"
+   ]},
+  {id:"achats",name:"Achats",sub:"Responsable Achats · Acheteur",icon:"ti-shopping-cart",
+   problems:[
+    "La production s'arrête — une commande passée il y a 73 jours n'a jamais été livrée, personne n'a suivi",
+    "On achète chez le même fournisseur depuis 3 ans sans jamais comparer les prix",
+    "Un bon de commande passé en double — on reçoit le double de la quantité commandée",
+    "Le responsable engage des dépenses sans savoir que son budget était épuisé",
+    "Un fournisseur livre en retard 6 fois sur 10 — on continue à commander chez lui, aucun historique",
+    "Les bons de commande sont éparpillés dans des emails, dossiers et registres papier",
+    "Délai moyen de livraison par fournisseur inconnu — impossible de planifier la production",
+    "Aucune alerte quand une livraison est en retard — on attend que la production signale le manque",
+    "Les économies réalisables en changeant de fournisseur n'ont jamais été calculées",
+    "Impossible de comparer le coût total d'achat entre plusieurs fournisseurs"
+   ]},
+  {id:"commercial",name:"Commercial & Ventes",sub:"Directeur Commercial · Chef des Ventes",icon:"ti-trending-up",
+   problems:[
+    "Impossible de savoir quel commercial a atteint ses objectifs ce mois sans appeler chacun",
+    "Le pipeline commercial — personne ne peut le visualiser sans une réunion de 2 heures",
+    "Taux de transformation des devis en commandes — inconnu sans recalcul manuel",
+    "Des devis envoyés depuis 3 semaines n'ont jamais été relancés — le client est allé ailleurs",
+    "Chiffre d'affaires par client — impossible à consolider rapidement",
+    "Les marges par produit ne sont jamais calculées en temps réel — décisions prises sans données",
+    "Quels produits se vendent le mieux ce trimestre — personne ne peut répondre en moins d'une heure",
+    "Les délais de paiement clients ne sont pas suivis — retards découverts trop tard",
+    "Le directeur commercial prépare son rapport mensuel la veille au soir — 4 heures de travail",
+    "Prévisions de ventes faites à l'intuition — pas de base historique structurée"
+   ]},
+  {id:"it",name:"Informatique & DSI",sub:"DSI · Responsable IT",icon:"ti-device-laptop",
+   problems:[
+    "Un serveur tombe en panne — aucun historique des incidents pour comprendre la cause",
+    "Le budget IT est consommé à 98% en août — 4 mois de projets à financer, aucune marge",
+    "Des licences logiciels expirent sans alerte — découverte quand l'application refuse de démarrer",
+    "Temps de résolution des tickets IT — jamais mesuré, impossible de justifier les ressources",
+    "L'inventaire du parc informatique est sur papier ou dans un fichier jamais mis à jour",
+    "Les sauvegardes : personne ne peut confirmer si elles ont fonctionné hier",
+    "D'anciens employés ont encore des accès actifs aux systèmes — jamais désactivés",
+    "Coût par projet IT — impossible à calculer sans passer une journée à chercher les données",
+    "Les SLA des prestataires ne sont pas respectés — aucune trace pour les pénaliser",
+    "Plan de continuité d'activité : jamais testé, jamais documenté à jour"
+   ]},
+  {id:"logistique",name:"Logistique & Stock",sub:"Responsable Logistique · Magasinier",icon:"ti-package",
+   problems:[
+    "Stock réel vs stock dans le système — ils ne correspondent jamais, personne ne sait lequel est juste",
+    "Rupture de stock découverte quand la production s'arrête — trop tard pour réagir",
+    "Délai de livraison moyen aux clients — impossible à calculer rapidement",
+    "Les camions partent à moitié chargés — le taux de remplissage n'est jamais optimisé",
+    "Les retours clients — aucun suivi structuré, les marchandises s'accumulent sans traitement",
+    "Inventaire physique : 3 jours de travail pour un résultat qu'on sait approximatif",
+    "Coût logistique par commande — jamais calculé, impossible d'évaluer la rentabilité",
+    "L'entrepôt est désorganisé — on perd 30 minutes par jour à chercher des articles",
+    "Consommation carburant par véhicule — jamais comparée, dérives non détectées",
+    "Les commandes urgentes coûtent 30% plus cher — jamais identifiées à l'avance"
+   ]},
+  {id:"marketing",name:"Marketing & Communication",sub:"Responsable Marketing · Chef de Produit",icon:"ti-speakerphone",
+   problems:[
+    "ROI des campagnes marketing — jamais calculé, impossible de justifier le budget",
+    "Budget marketing : qui a dépensé quoi — aucun suivi en temps réel",
+    "Les clients qui n'achètent plus depuis 6 mois — non identifiés, non relancés",
+    "Coût par lead généré — jamais calculé, pas de base de comparaison entre canaux",
+    "Le catalogue produits est mis à jour manuellement dans 3 fichiers — souvent incohérents",
+    "Comparaison avant/après campagne — impossible sans données structurées par période",
+    "Les actions marketing sont planifiées sur un tableau blanc — suivi impossible",
+    "Performance des canaux (réseaux sociaux, email, terrain) — jamais comparée sur les mêmes critères",
+    "Rapport marketing mensuel — 2 jours à consolider des données éparpillées",
+    "Le budget est dépensé sur les mêmes canaux sans savoir lesquels fonctionnent vraiment"
+   ]},
+  {id:"production",name:"Production & Fabrication",sub:"Responsable Production · Directeur Usine",icon:"ti-settings",
+   problems:[
+    "Taux de rebut — calculé à la fin du mois au lieu d'en temps réel, les pertes s'accumulent",
+    "Un arrêt machine non planifié — aucun historique de maintenance préventive pour l'anticiper",
+    "Productivité par ligne de production — inconnue sans calcul manuel chronophage",
+    "Les commandes en retard de production sont découvertes le jour de la livraison prévue",
+    "Consommation matières premières vs prévision — l'écart n'est connu qu'en fin de mois",
+    "Rendement par équipe (matin/soir/nuit) — jamais comparé, problèmes non identifiés",
+    "Heures de maintenance curative vs préventive — non suivies, coût réel inconnu",
+    "Coût de production par unité — jamais calculé en temps réel",
+    "Plan de production hebdomadaire — fait sur papier chaque lundi, 3h de travail",
+    "Niveau de stock de sécurité — jamais mis à jour, basé sur des habitudes pas sur des données"
+   ]},
+  {id:"direction",name:"Direction Générale",sub:"PDG · DG · Directeur",icon:"ti-building",
+   problems:[
+    "Le PDG demande les KPIs en réunion — préparation manuelle la veille au soir, 2h de travail",
+    "Comparer les performances entre départements — impossible sans appeler chaque responsable",
+    "Budget global consolidé — 3 jours à préparer, souvent des écarts inexpliqués",
+    "Les décisions stratégiques sont prises sans données fiables récentes",
+    "Le rapport de gestion mensuel est produit à la main — sources multiples, cohérence douteuse",
+    "Chaque service calcule ses indicateurs différemment — DAF et DRH donnent des chiffres différents",
+    "Prévisions de fin d'année — faites à l'intuition, sans base de calcul structurée",
+    "Aucun tableau de bord unifié — le dirigeant navigue entre 5 fichiers pour une vue globale",
+    "En cas de crise, aucune vision immédiate de l'impact sur les différents services",
+    "Les réunions de direction durent 3h sans décisions — pas de support visuel structuré"
+   ]}
+];
+
+const PHONE="213XXXXXXXXX"; // ← Remplacez par votre numéro WhatsApp (ex: 213770123456)
+
+let selectedService=null;
+let checkedItems=[];
+
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function buildServiceGrid(){
+  const grid=document.getElementById('service-grid');
+  grid.innerHTML='';
+  SERVICES.forEach(sv=>{
+    const card=document.createElement('div');
+    card.className='service-card';
+    card.id='svc-'+sv.id;
+    card.innerHTML=`
+      <div class="service-icon"><i class="ti ${sv.icon}" aria-hidden="true"></i></div>
+      <div class="service-name">${sv.name}</div>
+      <div class="service-sub">${sv.sub}</div>
+    `;
+    card.addEventListener('click',()=>selectService(sv.id));
+    grid.appendChild(card);
+  });
+}
+
+function selectService(id){
+  selectedService=id;
+  document.querySelectorAll('.service-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('svc-'+id).classList.add('selected');
+  document.getElementById('err-service').style.display='none';
+}
+
+function startDiag(){
+  if(!selectedService){
+    document.getElementById('err-service').style.display='block';
+    return;
+  }
+  const sv=SERVICES.find(s=>s.id===selectedService);
+  checkedItems=[];
+  document.getElementById('diag-service-label').textContent=sv.name;
+  const list=document.getElementById('problems-list');
+  list.innerHTML='';
+  sv.problems.forEach((p,i)=>{
+    const div=document.createElement('div');
+    div.className='problem-item';
+    const cb=document.createElement('input');
+    cb.type='checkbox';cb.id='p'+i;
+    cb.addEventListener('change',updateProgress);
+    const lbl=document.createElement('label');
+    lbl.htmlFor='p'+i;lbl.className='problem-label';lbl.textContent=p;
+    div.appendChild(cb);div.appendChild(lbl);
+    list.appendChild(div);
+  });
+  updateProgress();
+  document.getElementById('prog').style.width='0%';
+  goTo('s-diag');
+}
+
+function updateProgress(){
+  const cbs=document.querySelectorAll('#problems-list input[type=checkbox]');
+  const n=Array.from(cbs).filter(c=>c.checked).length;
+  document.getElementById('prog').style.width=(n/10*100)+'%';
+}
+
+function showResults(){
+  const cbs=document.querySelectorAll('#problems-list input[type=checkbox]');
+  const sv=SERVICES.find(s=>s.id===selectedService);
+  checkedItems=[];
+  cbs.forEach((cb,i)=>{if(cb.checked)checkedItems.push(i);});
+  if(checkedItems.length===0){
+    document.getElementById('err-diag').style.display='block';
+    return;
+  }
+  document.getElementById('err-diag').style.display='none';
+  const score=checkedItems.length;
+  document.getElementById('score-num').textContent=score;
+  document.getElementById('res-service-label').textContent=sv.name+' · '+sv.sub;
+
+  const ring=document.getElementById('score-ring');
+  let color,title,sub,recTitle,recDesc;
+  if(score<=2){
+    color='#16A34A';
+    title='Organisation bien structurée';
+    sub='Quelques points à optimiser';
+    recTitle='Formation avancée — 2 jours';
+    recDesc='Optimisation sur les points identifiés. Outils Excel, Power BI et SQL pour aller plus loin.';
+  }else if(score<=4){
+    color='#D97706';
+    title='Améliorations recommandées';
+    sub='Des pertes de temps identifiées chaque semaine';
+    recTitle='Formation ciblée — 3 jours';
+    recDesc='Solutions concrètes aux '+score+' problèmes identifiés. Fichiers fonctionnels remis à la fin de chaque journée.';
+  }else if(score<=7){
+    color='#C55A11';
+    title='Pertes significatives identifiées';
+    sub='Ces '+score+' situations coûtent du temps et de l\'argent chaque semaine';
+    recTitle='Programme complet — 5 jours, 30 problèmes résolus';
+    recDesc='Couverture complète du service '+sv.name+'. Excel, Power BI et SQL appliqués à vos cas réels.';
+  }else{
+    color='#DC2626';
+    title='Intervention urgente recommandée';
+    sub=score+' problèmes critiques identifiés — chaque semaine compte';
+    recTitle='Audit + Programme sur mesure';
+    recDesc='Audit de vos processus actuels + formation intensive. Solutions déployées directement dans votre organisation.';
+  }
+
+  ring.style.borderColor=color;
+  document.getElementById('score-num').style.color=color;
+  document.getElementById('score-title').textContent=title;
+  document.getElementById('score-sub').textContent=sub;
+  document.getElementById('rec-title').textContent=recTitle;
+  document.getElementById('rec-desc').textContent=recDesc;
+
+  const cl=document.getElementById('checked-list');
+  cl.innerHTML='';
+  checkedItems.forEach(i=>{
+    const div=document.createElement('div');
+    div.className='problem-checked';
+    div.innerHTML=`<i class="ti ti-alert-circle check-icon" aria-hidden="true"></i><span style="font-size:13px;color:#374151;line-height:1.5">${sv.problems[i]}</span>`;
+    cl.appendChild(div);
+  });
+
+  const problemsText=checkedItems.map(i=>'• '+sv.problems[i]).join('\n');
+  const msg=encodeURIComponent(
+    'Bonjour,\n\n'+
+    'Je viens de faire le diagnostic Hadji Consulting pour le service *'+sv.name+'*.\n\n'+
+    'Score : *'+score+' problème(s) identifié(s) sur 10*\n\n'+
+    problemsText+'\n\n'+
+    'Formation recommandée : '+recTitle+'\n\n'+
+    'Je suis intéressé(e) par une formation adaptée.\n\n'+
+    'https://cv-bouafia-rehabi.vercel.app'
+  );
+  document.getElementById('wa-link').href='https://wa.me/'+PHONE+'?text='+msg;
+  goTo('s-results');
+}
+
+function restart(){
+  selectedService=null;
+  checkedItems=[];
+  document.querySelectorAll('.service-card').forEach(c=>c.classList.remove('selected'));
+  goTo('s-choix');
+}
+
+buildServiceGrid();
+</script>
+</body>
+</html>

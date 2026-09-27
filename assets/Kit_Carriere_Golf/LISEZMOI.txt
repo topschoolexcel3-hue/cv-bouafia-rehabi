@@ -1,0 +1,17 @@
+KIT CARRIÈRE GOLFE — Bouafia Rehabi (25/08/2026)
+==================================================
+
+CONTENU
+  1_CV_Bouafia_Rehabi_EN_Gulf.docx      → CV anglais format Golfe (à personnaliser)
+  2_Lettre_Motivation_EN_AR.docx        → Lettre page 1 EN + page 2 AR (mêmes [champs])
+  3_Liste_Cibles_KSA_Oman.docx          → Employeurs cibles + checklist + sources
+
+AVANT ENVOI — remplacez tout ce qui est entre [crochets] :
+  • [votre URL] LinkedIn
+  • [Date], [nom du responsable], [académie], [ville]
+  • Ajoutez vos scores (IELTS, PL-300, AI-900) dès que obtenus
+
+CONSEILS
+  • Exportez chaque .docx en PDF avant d'envoyer (jamais de .docx).
+  • Joignez TOUJOURS 1 fiche programme exemple (ex. AI_Expert_Finance.md → PDF).
+  • Relancez après 7 jours sans réponse — c'est la norme au Golfe.
